@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geometry Unit 3 Flashcards</title>
+<meta name="description" content="Flashcards for Geometry Unit 3: logical reasoning, proof, and parallel and perpendicular lines.">
+<style>
+:root{--bg:#eef2f8;--ink:#1c2536;--muted:#5b6478;--brand:#1f3d7a;--brand2:#2f5fb3;--card:#fff;--line:#d5dcea;--good:#1f8a4c;--bad:#c0392b;--chip:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#121722;--ink:#e6ebf5;--muted:#9aa4ba;--brand:#8fb0ff;--brand2:#6f93e8;--card:#1d2433;--line:#30394d;--chip:#1d2433}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 40px}
+header h1{margin:0;font-size:1.5rem;color:var(--brand)}
+header p{margin:2px 0 14px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-size:.9rem;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--brand2);border-color:var(--brand2);color:#fff}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:6px 0 10px;color:var(--muted);font-size:.9rem}
+.bar label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.progress div{height:100%;background:var(--good);width:0;transition:width .3s}
+.scene{perspective:1400px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.card{position:relative;min-height:340px;transition:transform .5s;transform-style:preserve-3d}
+.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;background:var(--card);border:1px solid var(--line);box-shadow:0 8px 24px rgba(20,30,60,.10);padding:22px 22px 44px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;overflow:auto}
+.back{transform:rotateY(180deg);border-top:6px solid var(--good)}
+.front{border-top:6px solid var(--brand2)}
+.tag{position:absolute;top:12px;left:16px;font-size:.78rem;color:var(--muted);text-align:left}
+.kind{position:absolute;top:12px;right:16px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--muted)}
+.hint{position:absolute;bottom:12px;left:0;right:0;font-size:.78rem;color:var(--muted)}
+.txt{font-size:1.25rem;max-width:560px}
+.back .txt{font-size:1.15rem}
+.m{font-family:"STIX Two Math","Cambria Math","Times New Roman",serif;white-space:nowrap}
+.diagram{width:min(300px,80%);margin:4px auto 10px;background:#fff;border-radius:10px;padding:4px}
+.diagram svg{width:100%;height:auto;display:block}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.controls.nav{grid-template-columns:auto 1fr auto}
+button.b{font:inherit;font-weight:600;border:0;border-radius:12px;padding:12px 14px;cursor:pointer;color:#fff}
+.b.bad{background:var(--bad)}.b.good{background:var(--good)}
+.b.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.count{align-self:center;text-align:center;color:var(--muted)}
+.done{text-align:center;padding:30px 10px}
+.done h2{color:var(--brand);margin:.2em 0}
+.keys{color:var(--muted);font-size:.8rem;text-align:center;margin-top:16px}
+@media (max-width:520px){.txt{font-size:1.1rem}.card{min-height:380px}.keys{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<h1>Geometry Unit 3 Flashcards</h1>
+<p>Logical Reasoning, Proof, and Parallel &amp; Perpendicular Lines</p>
+</header>
+<div class="chips" id="chips"></div>
+<div class="bar">
+<span id="stats"></span>
+<span style="display:flex;gap:14px;flex-wrap:wrap">
+<label><input type="checkbox" id="missedOnly"> Still learning only</label>
+<label><input type="checkbox" id="reverse"> Answer first</label>
+</span>
+</div>
+<div class="progress"><div id="prog"></div></div>
+<div id="stage"></div>
+<div class="controls nav">
+<button class="b ghost" id="prev" aria-label="Previous card">◀ Back</button>
+<button class="b ghost" id="shuffle">🔀 Shuffle</button>
+<button class="b ghost" id="next" aria-label="Next card">Next ▶</button>
+</div>
+<div class="keys">Space = flip · ← → = move · 1 = still learning · 2 = got it</div>
+</div>
+<script>
+const CARDS = [{"l": "3-1", "f": "What is <b>inductive reasoning</b>?", "b": "Reaching a conclusion from a <b>pattern</b> of examples.", "k": "Vocab"}, {"l": "3-1", "f": "What is a <b>conjecture</b>?", "b": "An educated guess based on examples. It might be true, or it might not!", "k": "Vocab"}, {"l": "3-1", "f": "What is a <b>counterexample</b>?", "b": "<b>One</b> example that shows a conjecture is <b>false</b>. It can be a number, a drawing, or a statement.", "k": "Vocab"}, {"l": "3-1", "f": "How many counterexamples does it take to prove a conjecture false?", "b": "Just <b>one</b>. To show it is <i>always</i> true, you need a proof.", "k": "Rule"}, {"l": "3-1", "f": "Make a conjecture: what comes next?<br><span class='m'>5, 10, 20, 40, …</span>", "b": "Each number doubles, so the next is <b>80</b>.", "k": "Try it"}, {"l": "3-1", "f": "Find a counterexample:<br>“If a number is prime, then it is odd.”", "b": "<b>2</b> is prime, but it is even.", "k": "Try it"}, {"l": "3-1", "f": "Find a counterexample:<br>“A number squared is always bigger than the number.”", "b": "<b>1</b>: 1² = 1, which is not bigger. (½ works too: ¼ &lt; ½.)", "k": "Try it"}, {"l": "3-2", "f": "In “If <i>p</i>, then <i>q</i>,” which part is the <b>hypothesis</b> and which is the <b>conclusion</b>?", "b": "<b>p</b> (after “if”) is the hypothesis.<br><b>q</b> (after “then”) is the conclusion.", "k": "Vocab"}, {"l": "3-2", "f": "What does <span class='m'>~p</span> mean?", "b": "The <b>negation</b> of p: “not p.” It flips the truth value.", "k": "Vocab"}, {"l": "3-2", "f": "When is a <b>conjunction</b> <span class='m'>p ∧ q</span> true?", "b": "Only when <b>both</b> p and q are true. (“and”)", "k": "Rule"}, {"l": "3-2", "f": "When is a <b>disjunction</b> <span class='m'>p ∨ q</span> true?", "b": "When <b>at least one</b> of p, q is true. (“or”)", "k": "Rule"}, {"l": "3-2", "f": "When is a conditional <span class='m'>p → q</span> <b>false</b>?", "b": "Only when p is <b>true</b> and q is <b>false</b>. Every other case is true.", "k": "Rule"}, {"l": "3-2", "f": "How do you write the <b>converse</b>?", "b": "<b>Switch</b> the hypothesis and conclusion: <span class='m'>q → p</span>", "k": "Vocab"}, {"l": "3-2", "f": "How do you write the <b>inverse</b>?", "b": "<b>Negate</b> both parts: <span class='m'>~p → ~q</span>", "k": "Vocab"}, {"l": "3-2", "f": "How do you write the <b>contrapositive</b>?", "b": "<b>Switch AND negate</b>: <span class='m'>~q → ~p</span>", "k": "Vocab"}, {"l": "3-2", "f": "Which related conditional <b>always</b> has the same truth value as the original?", "b": "The <b>contrapositive</b>. (The converse and the inverse always match each other.)", "k": "Rule"}, {"l": "3-2", "f": "What is a <b>biconditional</b>?", "b": "<span class='m'>p ↔ q</span>, “p <b>if and only if</b> q.” You can write one when a conditional AND its converse are both true.", "k": "Vocab"}, {"l": "3-2", "f": "p: “4 is even.” &nbsp;q: “3 &gt; 7.”<br>Is <span class='m'>p ∧ q</span> true? Is <span class='m'>p ∨ q</span> true?", "b": "p is true, q is false.<br><span class='m'>p ∧ q</span> is <b>false</b>; <span class='m'>p ∨ q</span> is <b>true</b>.", "k": "Try it"}, {"l": "3-2", "f": "Write the converse:<br>“If it is a dog, then it has four legs.” Is it true?", "b": "“If it has four legs, then it is a dog.” <b>False</b>: a cat has four legs.", "k": "Try it"}, {"l": "3-3", "f": "What is <b>deductive reasoning</b>?", "b": "Using facts, rules, definitions, or properties to reach <b>valid</b> conclusions. (Inductive reasoning uses patterns.)", "k": "Vocab"}, {"l": "3-3", "f": "State the <b>Law of Detachment</b>.", "b": "If <span class='m'>p → q</span> is true and <span class='m'>p</span> is true, then <span class='m'>q</span> is true.", "k": "Rule"}, {"l": "3-3", "f": "State the <b>Law of Syllogism</b>.", "b": "If <span class='m'>p → q</span> and <span class='m'>q → r</span> are true, then <span class='m'>p → r</span> is true.", "k": "Rule"}, {"l": "3-3", "f": "If you know <span class='m'>p → q</span> is true and <span class='m'>q</span> is true, can you conclude <span class='m'>p</span>?", "b": "<b>No!</b> That is <b>invalid</b> (it affirms the conclusion).", "k": "Rule"}, {"l": "3-3", "f": "Valid or invalid?<br>If it rains, the grass is wet. The grass is wet. So it rained.", "b": "<b>Invalid.</b> The grass could be wet from a sprinkler. We were given the conclusion, not the hypothesis.", "k": "Try it"}, {"l": "3-3", "f": "Valid or invalid?<br>If you score 90+, you get an A. Sam scored 94. So Sam gets an A.", "b": "<b>Valid</b>, by the Law of Detachment.", "k": "Try it"}, {"l": "3-3", "f": "Use the Law of Syllogism:<br>If a shape is a square, it is a rectangle. If a shape is a rectangle, it has four right angles.", "b": "<b>If a shape is a square, then it has four right angles.</b>", "k": "Try it"}, {"l": "3-4", "f": "<b>Postulate 3.1</b>", "b": "Through any <b>two points</b> there is exactly <b>one line</b>.", "k": "Postulate"}, {"l": "3-4", "f": "<b>Postulate 3.2</b>", "b": "Through any <b>three noncollinear points</b> there is exactly <b>one plane</b>.", "k": "Postulate"}, {"l": "3-4", "f": "<b>Postulates 3.3 and 3.4</b>", "b": "3.3: A line contains at least <b>two points</b>.<br>3.4: A plane contains at least <b>three noncollinear points</b>.", "k": "Postulate"}, {"l": "3-4", "f": "<b>Postulate 3.5</b>", "b": "If two points lie in a plane, the <b>entire line</b> through them lies in that plane.", "k": "Postulate"}, {"l": "3-4", "f": "<b>Postulate 3.6</b>", "b": "If two <b>lines</b> intersect, their intersection is exactly <b>one point</b>.", "k": "Postulate"}, {"l": "3-4", "f": "<b>Postulate 3.7</b>", "b": "If two <b>planes</b> intersect, their intersection is a <b>line</b>.", "k": "Postulate"}, {"l": "3-4", "f": "What are the parts of a proof?", "b": "A <b>Given</b>, a <b>Prove</b>, and <b>Statements</b> with a <b>Reason</b> for each. The last statement matches the Prove.", "k": "Vocab"}, {"l": "3-4", "f": "Name the three proof formats.", "b": "<b>Two-column</b>, <b>flow</b>, and <b>paragraph</b> proofs.", "k": "Vocab"}, {"l": "3-4", "f": "Always, sometimes, or never?<br>“Two lines intersect in two points.”", "b": "<b>Never</b> (Postulate 3.6: exactly one point).", "k": "Try it"}, {"l": "3-4", "f": "Always, sometimes, or never?<br>“Three points lie in exactly one plane.”", "b": "<b>Sometimes.</b> Only if they are noncollinear (Postulate 3.2).", "k": "Try it"}, {"l": "3-4", "f": "Which postulate explains why two walls meet along a straight edge?", "b": "<b>Postulate 3.7</b>: two planes intersect in a line.", "k": "Try it"}, {"l": "3-5", "f": "<b>Ruler Postulate</b>: how do you find a distance on a number line?", "b": "Distance = |difference of the coordinates|.<br>Points at −3 and 5: |5 − (−3)| = <b>8</b>.", "k": "Rule"}, {"l": "3-5", "f": "State the <b>Segment Addition Postulate</b>.", "b": "If B is between A and C, then <b>AB + BC = AC</b>.", "k": "Postulate"}, {"l": "3-5", "f": "State the <b>Midpoint Theorem</b>.", "b": "If M is the midpoint of AB, then <b>AM ≅ MB</b>.", "k": "Theorem"}, {"l": "3-5", "f": "<b>Reflexive</b> Property of Congruence", "b": "<b>AB ≅ AB</b>: a figure is congruent to itself.", "k": "Property"}, {"l": "3-5", "f": "<b>Symmetric</b> Property of Congruence", "b": "If AB ≅ CD, then <b>CD ≅ AB</b>.", "k": "Property"}, {"l": "3-5", "f": "<b>Transitive</b> Property of Congruence", "b": "If AB ≅ CD and CD ≅ EF, then <b>AB ≅ EF</b>.", "k": "Property"}, {"l": "3-5", "f": "When do you use <b>≅</b> and when do you use <b>=</b>?", "b": "<b>≅</b> for figures (segments, angles).<br><b>=</b> for numbers (lengths, measures).", "k": "Rule"}, {"l": "3-5", "f": "B is between A and C. AB = 7 and AC = 19. Find BC.", "b": "7 + BC = 19, so <b>BC = 12</b>.", "k": "Try it"}, {"l": "3-5", "f": "B is between A and C. AB = x + 2, BC = 2x, AC = 14. Find x.", "b": "(x + 2) + 2x = 14 → 3x = 12 → <b>x = 4</b> (AB = 6, BC = 8).", "k": "Try it"}, {"l": "3-6", "f": "State the <b>Angle Addition Postulate</b>.", "b": "If D is in the interior of ∠ABC, then <b>m∠ABD + m∠DBC = m∠ABC</b>.", "k": "Postulate"}, {"l": "3-6", "f": "<b>Complementary</b> angles", "b": "Two angles whose measures add to <b>90°</b>.", "k": "Vocab"}, {"l": "3-6", "f": "<b>Supplementary</b> angles", "b": "Two angles whose measures add to <b>180°</b>. They don't have to touch.", "k": "Vocab"}, {"l": "3-6", "f": "<b>Linear pair</b>", "b": "Two <b>adjacent</b> angles that form a straight line. They add to <b>180°</b>.", "k": "Vocab"}, {"l": "3-6", "f": "<b>Vertical angles</b>", "b": "The opposite angles formed when two lines cross. They are <b>congruent</b> (Vertical Angles Theorem).", "k": "Vocab"}, {"l": "3-6", "f": "<b>Supplement Theorem (3.3)</b>", "b": "If two angles form a <b>linear pair</b>, then they are <b>supplementary</b>.", "k": "Theorem"}, {"l": "3-6", "f": "<b>Congruent Supplements Theorem (3.6)</b>", "b": "Angles supplementary to the <b>same angle</b> (or congruent angles) are <b>congruent</b>.", "k": "Theorem"}, {"l": "3-6", "f": "<b>Congruent Complements Theorem (3.7)</b>", "b": "Angles complementary to the <b>same angle</b> (or congruent angles) are <b>congruent</b>.", "k": "Theorem"}, {"l": "3-6", "f": "An angle measures 35°. Find its complement and its supplement.", "b": "Complement: 90 − 35 = <b>55°</b><br>Supplement: 180 − 35 = <b>145°</b>", "k": "Try it"}, {"l": "3-6", "f": "∠1 and ∠2 are a linear pair. m∠1 = 2x and m∠2 = x + 30. Find both angles.", "b": "2x + x + 30 = 180 → 3x = 150 → x = 50<br>m∠1 = <b>100°</b>, m∠2 = <b>80°</b>", "k": "Try it"}, {"l": "3-6", "f": "Vertical angles measure 3x + 4 and 5x − 20. Find x.", "b": "3x + 4 = 5x − 20 → 24 = 2x → <b>x = 12</b> (both 40°).", "k": "Try it"}, {"l": "3-7", "f": "<b>Parallel lines</b> vs. <b>skew lines</b>", "b": "<b>Parallel:</b> in the same plane, never meet.<br><b>Skew:</b> never meet and are <b>not</b> in the same plane.", "k": "Vocab"}, {"l": "3-7", "f": "What is a <b>transversal</b>?", "b": "A line that crosses two or more other lines.", "k": "Vocab"}, {"l": "3-7", "f": "[[DIAGRAM]]Which angles are <b>interior</b>? Which are <b>exterior</b>?", "b": "<b>Interior</b> (between p and q): ∠3, ∠4, ∠5, ∠6<br><b>Exterior</b> (outside): ∠1, ∠2, ∠7, ∠8", "k": "Vocab"}, {"l": "3-7", "f": "[[DIAGRAM]]What kind of pair are ∠1 and ∠5? If p ∥ q, how are they related?", "b": "<b>Corresponding angles</b> (same position at each line). They are <b>congruent</b>.", "k": "Rule"}, {"l": "3-7", "f": "[[DIAGRAM]]What kind of pair are ∠4 and ∠5? If p ∥ q, how are they related?", "b": "<b>Alternate interior angles</b> (between the lines, opposite sides of t). They are <b>congruent</b>.", "k": "Rule"}, {"l": "3-7", "f": "[[DIAGRAM]]What kind of pair are ∠1 and ∠8? If p ∥ q, how are they related?", "b": "<b>Alternate exterior angles</b> (outside the lines, opposite sides of t). They are <b>congruent</b>.", "k": "Rule"}, {"l": "3-7", "f": "[[DIAGRAM]]What kind of pair are ∠4 and ∠6? If p ∥ q, how are they related?", "b": "<b>Consecutive interior angles</b> (between the lines, same side of t). They are <b>supplementary</b> (add to 180°).", "k": "Rule"}, {"l": "3-7", "f": "[[DIAGRAM]]Name the pair: ∠2 and ∠7", "b": "<b>Alternate exterior angles</b>", "k": "Try it"}, {"l": "3-7", "f": "[[DIAGRAM]]p ∥ q and m∠1 = 120°. Find m∠5 and m∠6.", "b": "∠5 corresponds to ∠1: <b>120°</b>.<br>∠6 forms a linear pair with ∠5: <b>60°</b>.", "k": "Try it"}, {"l": "3-7", "f": "With two parallel lines and a transversal, what's the shortcut for all 8 angles?", "b": "Every angle is either the “big” one or the “small” one, and <b>big + small = 180°</b>.", "k": "Rule"}, {"l": "3-8", "f": "What is the <b>slope formula</b>?", "b": "<span class='m'>m = (y₂ − y₁) / (x₂ − x₁)</span> = rise / run", "k": "Rule"}, {"l": "3-8", "f": "What is the slope of a <b>horizontal</b> line? A <b>vertical</b> line?", "b": "Horizontal: <b>0</b><br>Vertical: <b>undefined</b>", "k": "Vocab"}, {"l": "3-8", "f": "<b>Slope-intercept form</b> and <b>point-slope form</b>", "b": "<span class='m'>y = mx + b</span> (m = slope, b = y-intercept)<br><span class='m'>y − y₁ = m(x − x₁)</span>", "k": "Vocab"}, {"l": "3-8", "f": "How are the slopes of <b>parallel</b> lines related?", "b": "They are the <b>same</b>.", "k": "Rule"}, {"l": "3-8", "f": "How are the slopes of <b>perpendicular</b> lines related?", "b": "<b>Opposite reciprocals</b>: flip the fraction and change the sign. Their product is <b>−1</b>.", "k": "Rule"}, {"l": "3-8", "f": "Find the slope through (2, 3) and (6, 11).", "b": "(11 − 3)/(6 − 2) = 8/4 = <b>2</b>", "k": "Try it"}, {"l": "3-8", "f": "A line has slope ⅖. What is the slope of a line perpendicular to it?", "b": "<b>−5/2</b> (flip and change the sign).", "k": "Try it"}, {"l": "3-8", "f": "Write the line parallel to <span class='m'>y = 4x + 1</span> through (1, 2).", "b": "Slope 4: 2 = 4(1) + b → b = −2 → <b>y = 4x − 2</b>", "k": "Try it"}, {"l": "3-8", "f": "Write the line perpendicular to <span class='m'>y = 2x + 7</span> through (4, 1).", "b": "Slope −½: 1 = −½(4) + b → b = 3 → <b>y = −½x + 3</b>", "k": "Try it"}, {"l": "3-9", "f": "What is the main idea of Lesson 3-9?", "b": "The 3-7 theorems run <b>backward</b> (converses): if the angles have the right relationship, then the lines are <b>parallel</b>.", "k": "Vocab"}, {"l": "3-9", "f": "<b>Converse of Corresponding Angles</b>", "b": "If corresponding angles are <b>congruent</b>, then the lines are parallel.", "k": "Theorem"}, {"l": "3-9", "f": "<b>Alternate Interior Angles Converse</b>", "b": "If alternate interior angles are <b>congruent</b>, then the lines are parallel.", "k": "Theorem"}, {"l": "3-9", "f": "<b>Alternate Exterior Angles Converse</b>", "b": "If alternate exterior angles are <b>congruent</b>, then the lines are parallel.", "k": "Theorem"}, {"l": "3-9", "f": "<b>Consecutive Interior Angles Converse</b>", "b": "If consecutive interior angles are <b>supplementary</b>, then the lines are parallel.", "k": "Theorem"}, {"l": "3-9", "f": "<b>Perpendicular Transversal Converse</b>", "b": "In a plane, if two lines are <b>perpendicular to the same line</b>, then they are parallel.", "k": "Theorem"}, {"l": "3-9", "f": "[[DIAGRAM]]m∠4 = 3x + 10 and m∠5 = 5x − 30. What x makes p ∥ q?", "b": "Alternate interior angles must be congruent: 3x + 10 = 5x − 30 → <b>x = 20</b> (both 70°).", "k": "Try it"}, {"l": "3-9", "f": "[[DIAGRAM]]m∠3 = 110° and m∠5 = 70°. Is p ∥ q? Why?", "b": "<b>Yes.</b> Consecutive interior angles, and 110 + 70 = 180, so they are supplementary (Consecutive Interior Angles Converse).", "k": "Try it"}, {"l": "3-10", "f": "What is the <b>distance from a point to a line</b>?", "b": "The length of the <b>perpendicular</b> segment from the point to the line. It is the <b>shortest</b> path.", "k": "Vocab"}, {"l": "3-10", "f": "State the <b>Perpendicular Postulate</b>.", "b": "Through a point not on a line, there is <b>exactly one</b> line perpendicular to the given line.", "k": "Postulate"}, {"l": "3-10", "f": "What are the <b>4 steps</b> to find the distance from point P to a line?", "b": "1) Write the line's equation<br>2) Write the perpendicular line through P<br>3) Solve the system to find where they meet, Q<br>4) Use the distance formula for PQ", "k": "Rule"}, {"l": "3-10", "f": "What is the <b>distance formula</b>?", "b": "<span class='m'>d = √((x₂ − x₁)² + (y₂ − y₁)²)</span>", "k": "Rule"}, {"l": "3-10", "f": "What does <b>equidistant</b> mean for parallel lines?", "b": "The distance between them is the <b>same everywhere</b>. Pick a point on one line and find its distance to the other.", "k": "Vocab"}, {"l": "3-10", "f": "Find the distance between (1, 1) and (4, 5).", "b": "√(3² + 4²) = √25 = <b>5</b>", "k": "Try it"}, {"l": "3-10", "f": "Distance between the parallel lines y = 5 and y = −1?", "b": "5 − (−1) = <b>6</b>", "k": "Try it"}, {"l": "3-10", "f": "Distance between the parallel lines x = 2 and x = −3?", "b": "2 − (−3) = <b>5</b>", "k": "Try it"}, {"l": "3-10", "f": "The perpendicular from P(1, 7) meets y = x + 2 at Q(3, 5). What is the distance?", "b": "√((3−1)² + (5−7)²) = √8 = <b>2√2 ≈ 2.83</b>", "k": "Try it"}];
+const LESSONS = {"3-1": "Conjectures and Counterexamples", "3-2": "Statements and Conditionals", "3-3": "Deductive Reasoning", "3-4": "Writing Proofs", "3-5": "Segment Relationships", "3-6": "Angle Relationships", "3-7": "Parallel Lines and Transversals", "3-8": "Slope and Equations of Lines", "3-9": "Proving Lines Parallel", "3-10": "Perpendiculars and Distance"};
+const DIAGRAM = "<svg  viewBox=\"0 0 300 240\" font-family=\"Helvetica, Arial\" font-size=\"15\">\n<line x1=\"10\" y1=\"70\" x2=\"290\" y2=\"70\" stroke=\"#1f3d7a\" stroke-width=\"2.5\"/>\n<line x1=\"10\" y1=\"170\" x2=\"290\" y2=\"170\" stroke=\"#1f3d7a\" stroke-width=\"2.5\"/>\n<line x1=\"60\" y1=\"230\" x2=\"240\" y2=\"10\" stroke=\"#9a5b00\" stroke-width=\"2.5\"/>\n<text x=\"272\" y=\"62\" font-style=\"italic\" fill=\"#1f3d7a\">p</text><text x=\"272\" y=\"162\" font-style=\"italic\" fill=\"#1f3d7a\">q</text>\n<text x=\"244\" y=\"22\" font-style=\"italic\" fill=\"#9a5b00\">t</text>\n<g fill=\"#1b1f2a\" font-weight=\"bold\"><text x=\"160.9090909090909\" y=\"63\">1</text><text x=\"202.9090909090909\" y=\"63\">2</text><text x=\"166.9090909090909\" y=\"89\">3</text><text x=\"206.9090909090909\" y=\"89\">4</text><text x=\"79.0909090909091\" y=\"163\">5</text><text x=\"121.0909090909091\" y=\"163\">6</text><text x=\"85.0909090909091\" y=\"189\">7</text><text x=\"125.0909090909091\" y=\"189\">8</text></g>\n</svg>";
+CARDS.forEach((c, i) => c.id = c.l + ":" + i);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+let marks = store.get("geo3-marks", {});      // id -> "got" | "miss"
+let lesson = store.get("geo3-lesson", "all");
+let deck = [], pos = 0, flipped = false;
+const $ = id => document.getElementById(id);
+
+function buildChips() {
+  const ids = ["all", ...Object.keys(LESSONS)];
+  $("chips").innerHTML = ids.map(id =>
+    `<button class="chip" data-l="${id}" title="${id === "all" ? "All lessons" : LESSONS[id]}" aria-pressed="${id === lesson}">${id === "all" ? "All" : id}</button>`).join("");
+  $("chips").onclick = e => {
+    const b = e.target.closest(".chip"); if (!b) return;
+    lesson = b.dataset.l; store.set("geo3-lesson", lesson); buildChips(); makeDeck(false);
+  };
+}
+function makeDeck(shuffle) {
+  deck = CARDS.filter(c => (lesson === "all" || c.l === lesson) && (!$("missedOnly").checked || marks[c.id] !== "got"));
+  if (shuffle) for (let i = deck.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [deck[i], deck[j]] = [deck[j], deck[i]]; }
+  pos = 0; render();
+}
+function fill(html) {
+  return html.includes("[[DIAGRAM]]") ? `<div class="diagram">${DIAGRAM}</div>` + html.replace("[[DIAGRAM]]", "") : html;
+}
+function render() {
+  flipped = false;
+  const pool = CARDS.filter(c => lesson === "all" || c.l === lesson);
+  const got = pool.filter(c => marks[c.id] === "got").length;
+  $("stats").textContent = `${lesson === "all" ? "All lessons" : lesson + " " + LESSONS[lesson]} · ✅ ${got} of ${pool.length} learned`;
+  $("prog").style.width = (pool.length ? 100 * got / pool.length : 0) + "%";
+  if (!deck.length || pos >= deck.length) {
+    $("stage").innerHTML = `<div class="face done" style="position:static;min-height:300px"><div style="font-size:3rem">🎉</div>
+      <h2>${deck.length ? "You finished this set!" : "Nothing left to study here!"}</h2>
+      <p>${got} of ${pool.length} cards marked “Got it.”</p>
+      <div class="controls" style="width:100%;max-width:420px">
+      <button class="b ghost" onclick="pos=0;$('missedOnly').checked=false;makeDeck(true)">Study all again</button>
+      <button class="b bad" onclick="$('missedOnly').checked=true;makeDeck(true)">Only “still learning”</button></div>
+      <p style="margin-top:14px"><a href="#" onclick="if(confirm('Clear all your progress?')){marks={};store.set('geo3-marks',marks);makeDeck(false)}return false" style="color:var(--muted)">Reset progress</a></p></div>`;
+    return;
+  }
+  const c = deck[pos], rev = $("reverse").checked;
+  const mark = marks[c.id] === "got" ? " · ✅" : marks[c.id] === "miss" ? " · 🔁" : "";
+  const face = (cls, body, hint) => `<div class="face ${cls}"><div class="tag">${c.l} ${LESSONS[c.l]}${mark}</div><div class="kind">${c.k}</div><div class="txt">${fill(body)}</div><div class="hint">${hint}</div></div>`;
+  $("stage").innerHTML = `<div class="scene" id="scene"><div class="card" id="card">
+    ${face("front", rev ? c.b : c.f, "Tap to flip · card " + (pos + 1) + " of " + deck.length)}
+    ${face("back", rev ? c.f : c.b, "How did you do?")}</div></div>
+    <div class="controls"><button class="b bad" id="miss">🔁 Still learning</button><button class="b good" id="got">✅ Got it</button></div>`;
+  $("scene").onclick = flip;
+  $("miss").onclick = () => grade("miss");
+  $("got").onclick = () => grade("got");
+}
+function flip() { flipped = !flipped; const el = $("card"); if (el) el.classList.toggle("flipped", flipped); }
+function grade(g) { const c = deck[pos]; if (!c) return; marks[c.id] = g; store.set("geo3-marks", marks); pos++; render(); }
+function move(d) { if (!deck.length) return; pos = Math.max(0, Math.min(deck.length - 1, pos + d)); render(); }
+$("prev").onclick = () => move(-1);
+$("next").onclick = () => { if (pos >= deck.length) return; pos++; render(); };
+$("shuffle").onclick = () => makeDeck(true);
+$("missedOnly").onchange = () => makeDeck(false);
+$("reverse").onchange = render;
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.key === " " || e.key === "Enter") { e.preventDefault(); flip(); }
+  else if (e.key === "ArrowRight") { if (pos < deck.length) { pos++; render(); } }
+  else if (e.key === "ArrowLeft") move(-1);
+  else if (e.key === "1") grade("miss");
+  else if (e.key === "2") grade("got");
+});
+let sx = null;
+document.addEventListener("touchstart", e => { sx = e.touches[0].clientX; }, { passive: true });
+document.addEventListener("touchend", e => {
+  if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; sx = null;
+  if (Math.abs(dx) > 60 && e.target.closest(".scene")) { dx < 0 ? (pos < deck.length && (pos++, render())) : move(-1); }
+});
+buildChips(); makeDeck(false);
+</script>
+</body>
+</html>
